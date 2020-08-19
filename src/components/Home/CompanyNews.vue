@@ -1,0 +1,72 @@
+<template>
+  <div
+    id="company-news"
+    class="m_bk"
+  >
+    <h3>
+      <span>
+        <router-link to="/CompanyNewsList">更多+</router-link>
+      </span>
+      <img src="@/assets/newmn4.png">公司动态
+    </h3>
+    <ul class="mnlist" v-for="item in showCompanyNews" :key="item.id">
+      <li>
+        ·
+        <router-link :to="{path:'/CompanyNewsSingle/' + item.id}">{{item.name}}</router-link>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      n:5 //显示文章数
+    }
+  },
+  props:{
+    companyNews:Array
+  },
+  computed: {
+    showCompanyNews (){
+      return this.companyNews.slice(0,this.n)
+    }
+  },
+};
+</script>
+<style lang="css" scoped>
+#company-news {
+  background: #fff;
+  margin-bottom: 10px;
+}
+h3 {
+  font-size: 18px;
+  padding: 8px 3% 6px 3%;
+  border-bottom: #e4e4e4 3px solid;
+
+  margin-bottom: 5px;
+  text-align: left;
+}
+h3 img {
+  height: 20px;
+  margin-right: 4px;
+  vertical-align: bottom;
+}
+.m_bk h3 span {
+  float: right;
+  font-size: 14px;
+  font-weight: normal;
+  border: #dbdbdb 1px solid;
+  padding: 0 14px;
+  border-radius: 16px;
+  line-height: 24px !important;
+}
+.mnlist li {
+  text-align: left;
+  line-height: 38px;
+  border-bottom: #f1f1f1 1px solid;
+  height: 38px;
+  overflow: hidden;
+  padding: 0 3%;
+}
+</style>
