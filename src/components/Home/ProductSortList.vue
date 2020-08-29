@@ -97,7 +97,7 @@ export default {
     this.n = Array(this.productSort.length).fill(4) //每个分类显示4个图片
     this.buttonContent = Array(this.productSort.length).fill('点击加载更多')
     this.buttonShowFlag = Array(this.productSort.length).fill(false)
-    //二位数组，控制占位图片的显示
+    //二维数组，控制占位图片的显示
     this.showFillImgFlag = Array(this.productSort.length).fill([])
 
     // 循环每一个种类的产品
