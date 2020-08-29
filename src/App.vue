@@ -59,8 +59,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getHomeData')
-    //默认进入Home，
+    this.$store.dispatch('getHomeData')    //默认进入Home，
     // if(this.$route.path == '/'){
     //   this.$router.push('Home')
     // }
@@ -72,7 +71,10 @@ export default {
   margin: 0;
   padding: 0;
 }
-
+body{
+    max-width: 760px;
+    min-width: 310px;
+}
 a {
   text-decoration: none;
   color: #666666;
