@@ -6,7 +6,7 @@
           <a href="/"><p><img src="@/assets/ft5.png"></p>首页</a>
         </li>
         <li class="nav2">
-          <a href="tel:13333840256">
+          <a :href="'tel:'+ tel">
             <p>
               <img src="@/assets/ft2.png">
             </p>联系我们
@@ -49,7 +49,8 @@ export default {
     TransitionScale
   },
   props: {
-    closeAllFlag: Boolean
+    closeAllFlag: Boolean,
+    tel:String
   },
   data() {
     return {
@@ -98,6 +99,8 @@ li img {
   bottom: -1px;
   width: 100%;
   z-index: 996;
+  max-width: 760px;
+  min-width: 310px;
 }
 .comnav>ul{
   overflow: hidden;

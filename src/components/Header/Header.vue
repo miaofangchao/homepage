@@ -127,6 +127,8 @@
 		z-index: 996;
 		line-height: 46px;
 		position: fixed;
+		max-width: 760px;
+		min-width: 310px;
 	}
 
 	.logodiv {

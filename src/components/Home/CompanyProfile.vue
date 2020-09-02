@@ -72,29 +72,31 @@ export default {
   margin-bottom: 10px;
 }
 .rzdiv {
-  max-width: 640px;
   background: #fff;
   padding: 10px 3%;
   position: relative;
   border-bottom: #ececec 1px solid;
   border-top: #ececec 1px solid;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .rzpic {
   float: left;
-  width: 20%;
-  text-align: center;
   font-size: 0;
   padding-left: 2%;
+
 }
 .rzpic img {
   width: 100%;
 }
 .rzcont {
-  padding-left: 5%;
   float: left;
-  width: 70%;
   overflow: hidden;
+  margin-left: 5%;
+  width: 70%;
+
 }
 .rzcont h1 {
   font-size: 18px;

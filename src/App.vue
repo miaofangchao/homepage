@@ -11,6 +11,7 @@
       </keep-alive>
     </TransitionFade>
       <Footer
+        :tel="msg.tel"
         :close-all-flag="closeAllFlag"
         @toggleCover="toggleCover($event)"
         @resetCloseAllFlag="resetCloseAllFlag($event)"
@@ -58,6 +59,11 @@ export default {
       this.closeAllFlag = $event;
     }
   },
+  computed: {
+    msg(){
+      return this.$store.state.msg
+    }
+  },
   created() {
     this.$store.dispatch('getHomeData')    //默认进入Home，
     // if(this.$route.path == '/'){
@@ -70,10 +76,6 @@ export default {
 * {
   margin: 0;
   padding: 0;
-}
-body{
-    max-width: 760px;
-    min-width: 310px;
 }
 a {
   text-decoration: none;
@@ -95,6 +97,9 @@ li {
   text-align: center;
   color: #2c3e50;
   background: #f1f1f1;
+  max-width: 760px;
+  min-width: 310px;
+  margin: 0 auto;
 }
 
 #nav {

@@ -7,7 +7,8 @@
       <div id="contentText">
         <ul>
           <li v-for="item in investmentPolicy" :key="item">
-            <img :src="item" alt />
+            <img :src="item" alt v-if="item.indexOf('.mp4')==-1" />
+            <video :src="item" v-else></video>
           </li>
         </ul>
       </div>
@@ -41,55 +42,45 @@ export default {
   // },
   //招商政策模块高度的获取：有图片加载问题，获取的div高度可能不准确。
   mounted() {
-    // console.log(this.investmentPolicy)
-    var div = document.getElementById("contentTextFather"); //父元素
-    var img = div.querySelectorAll("img");
-    //判断是否有图片
-    if (img.length) {
-      var count = 0
-      //图片加载后获取高度
-      for(let i = 0;i<img.length;i++){
-        img[i].addEventListener('load',()=>{
-          count++
-          if(count == img.length){
-            var p = document.getElementById("contentText"); //子元素
-            var pHeight = getComputedStyle(p).height; //带 px 的值
-            var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
-            this.pHeight = pNum;
-            if (pNum < 400) {
-              div.style.height = pHeight;
-              this.showButtenFlag = false;
-            } else {
-              div.style.height = "400px";
+    this.$nextTick().then(()=>{
+      var div = document.getElementById("contentTextFather"); //父元素
+      var img = div.querySelectorAll("img");
+      //判断是否有图片
+      console.log(img.length)
+      if (img.length) {
+        var count = 0
+        //图片加载后获取高度
+        for(let i = 0;i<img.length;i++){
+          img[i].addEventListener('load',()=>{
+            count++
+            if(count == img.length){
+              var p = document.getElementById("contentText"); //子元素
+              var pHeight = getComputedStyle(p).height; //带 px 的值
+              var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
+              pHeight = pNum + 'px';
+              if (pNum < 400) {
+                div.style.height = pHeight;
+                this.showButtenFlag = false;
+              } else {
+                div.style.height = "400px";
+              }
             }
-          }
-        })
-      }
-      // img[len].addEventListener("load", () => {
-      //   console.log('有图片')
-      //   var p = document.getElementById("contentText"); //子元素
-      //   var pHeight = getComputedStyle(p).height; //带 px 的值
-      //   var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
-      //   this.pHeight = pNum;
-      //   if (pNum < 400) {
-      //     div.style.height = pHeight;
-      //     this.showButtenFlag = false;
-      //   } else {
-      //     div.style.height = "400px";
-      //   }
-      // });
-    } else {
-      var p = document.getElementById("contentText"); //子元素
-      var pHeight = getComputedStyle(p).height; //带 px 的值
-      var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
-      this.pHeight = pNum;
-      if (pNum < 400) {
-        div.style.height = pHeight;
-        this.showButtenFlag = false;
+          })
+        }
       } else {
-        div.style.height = "400px";
+        var p = document.getElementById("contentText"); //子元素
+        var pHeight = getComputedStyle(p).height; //带 px 的值
+        var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
+        pHeight = pNum + 'px';
+        console.log(pNum)
+        if (pNum < 400) {
+          div.style.height = pHeight;
+          this.showButtenFlag = false;
+        } else {
+          div.style.height = "400px";
+        }
       }
-    }
+    })
   },
 };
 </script>
