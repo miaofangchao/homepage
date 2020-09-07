@@ -79,9 +79,9 @@ export default {
   directives:{
     liResetHeight:{
       bind(el){
-        const windowWidth = document.body.offsetWidth//窗口宽度
+        const appWidth = document.getElementById('app').offsetWidth //窗口宽度 app 的width有最大最小限制，使用body的width会出现值偏大的情况
         const imgWH = 600 / 480                      //图片的宽高比
-        el.style.height = ( windowWidth - windowWidth * 0.1 ) / 2 / imgWH + 30 + 'px' //0.1是10%，图片的margin
+        el.style.height = ( appWidth - appWidth * 0.1 ) / 2 / imgWH + 30 + 'px' //0.1是10%，图片的margin
       }
     }
   },

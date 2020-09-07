@@ -86,9 +86,9 @@ export default {
     //初始化li的高度
     liResetHeight:{
       bind(el){
-        const windowWidth = document.body.offsetWidth//窗口宽度
+        const appWidth = document.getElementById('app').offsetWidth //窗口宽度 app 的width有最大最小限制，使用body的width会出现值偏大的情况
         const imgWH = 600 / 480                      //图片的宽高比
-        el.style.height = ( windowWidth - windowWidth * 0.1 ) / 2 / imgWH + 30 + 'px' //0.1是10%，图片的margin；30是p标签的高度，
+        el.style.height = ( appWidth - appWidth * 0.1 ) / 2 / imgWH + 30 + 'px' //0.1是10%，图片的margin；30是p标签的高度，
       }
     }
   },
