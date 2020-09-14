@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from "axios";
 import url from '../api/home'
+import getLoginState from '@/api/mobile-loginState'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -11,8 +12,16 @@ export default new Vuex.Store({
     
     msg:null,
     companyProfile:null,
+    loginFlag: '',
+    comId:''
 },
   mutations: {
+    login(state) {
+      state.loginFlag = true
+    },
+    logout(state) {
+      state.loginFlag = false
+    }
   },
   actions: {
     getHomeData({ state }) {
@@ -40,21 +49,17 @@ export default new Vuex.Store({
           });
         }
       }))
-      // axios.get(url)
-      // .then(response => {
-      //     var responseMsg = response.data.split("||");
-      //     try {
-      //       state.msg = JSON.parse(responseMsg[0]);
-      //     } catch (error) {
-      //       console.log(error);
-      //     }
-      //     state.companyProfile = responseMsg[1]
-      //     document.title = state.msg.name;
-      // })
-      // .catch(function (error) {
-      //   // 请求失败处理
-      //   console.log(error);
-      // });
+    },
+    testLoginState({ state }) {
+      getLoginState().then(
+        (resolve) => {
+          state.loginFlag = resolve.data.loginState
+          state.comId = resolve.data.comId
+        },
+        () => {
+          state.loginFlag = false
+        }
+      )
     }
   },
   modules: {

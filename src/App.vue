@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <Header
-      :close-all-flag="closeAllFlag"
-      @toggleCover="toggleCover($event)"
-      @resetCloseAllFlag="resetCloseAllFlag($event)"
-    />
+    <Header :loginFlag="loginFlag"/>
     <TransitionFade mode="out-in">
       <keep-alive :max="10">
         <router-view></router-view>
@@ -62,6 +58,9 @@ export default {
   computed: {
     msg(){
       return this.$store.state.msg
+    },
+    loginFlag(){
+      return this.$store.state.loginFlag
     }
   },
   created() {

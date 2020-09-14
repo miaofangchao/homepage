@@ -282,7 +282,7 @@ export default {
   padding: 6px 0;
   margin-top: 10px;
 }
-select{
+#leave-message select{
   width: 35%;
   margin-right: 5px;
   font-size: 16px;

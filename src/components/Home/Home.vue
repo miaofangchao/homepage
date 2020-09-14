@@ -81,6 +81,5 @@ export default {
 #home {
   background: #f1f1f1;
   padding-bottom: 10px;
-  margin-top: 46px;
 }
 </style>
