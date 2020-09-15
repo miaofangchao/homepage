@@ -21,6 +21,7 @@ const getLoginState = ()=>{
 }
 export default getLoginState
 
+//根据cookie判断登录状态
 // 数据结构：
 //     登录成功：
 //     {

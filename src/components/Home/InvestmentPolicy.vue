@@ -46,7 +46,7 @@ export default {
       var div = document.getElementById("contentTextFather"); //父元素
       var img = div.querySelectorAll("img");
       //判断是否有图片
-      console.log(img.length)
+      // console.log(img.length)
       if (img.length) {
         var count = 0
         //图片加载后获取高度
@@ -72,7 +72,7 @@ export default {
         var pHeight = getComputedStyle(p).height; //带 px 的值
         var pNum = Number(pHeight.slice(0, pHeight.length - 2)); //获取P高度的数值
         pHeight = pNum + 'px';
-        console.log(pNum)
+        // console.log(pNum)
         if (pNum < 400) {
           div.style.height = pHeight;
           this.showButtenFlag = false;

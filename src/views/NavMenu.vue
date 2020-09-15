@@ -34,7 +34,7 @@ export default {
 <style lang="css" scoped>
 #nav-menu {
   background: white;
-  padding: 2% 2%;
+  padding: 2% 0%;
   margin-bottom: 10px;
 }
 .router-link-active{
@@ -47,7 +47,7 @@ a {
   color: #d80105;
   width: 25%;
   text-align: center;
-  font-size: 20px;
+  font-size: 150%;
   font-weight: bold;
 }
 </style>

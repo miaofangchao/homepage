@@ -32,7 +32,6 @@ export default {
 #investment-policy {
   width: 100%;
   margin-bottom: 10px;
-  margin-top: 46px;
 }
 h3 {
     font-size: 18px;

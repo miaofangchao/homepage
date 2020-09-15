@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :loginFlag="loginFlag"/>
+    <Header :login-flag="loginFlag" />
     <TransitionFade mode="out-in">
       <keep-alive :max="10">
         <router-view></router-view>
@@ -75,6 +75,31 @@ export default {
 * {
   margin: 0;
   padding: 0;
+}
+@media (min-width: 320px) {
+  body {
+    font-size: 12px;
+  }
+}
+@media (min-width: 340px) {
+  body {
+    font-size: 13px;
+  }
+}
+@media (min-width: 360px) {
+  body {
+    font-size: 14px;
+  }
+}
+@media (min-width: 400px) {
+  body {
+    font-size: 15px;
+  }
+}
+@media (min-width: 720px) {
+  body {
+    font-size: 22px;
+  }
 }
 a {
   text-decoration: none;

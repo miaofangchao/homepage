@@ -7,6 +7,7 @@ import InvestmentPolicy from '../views/InvestmentPolicy'
 import CompanyNewsSingle from '../views/CompanyNewsSingle'
 import LeaveMessage from '../views/LeaveMessage'
 import ProductDetails from '../views/ProductDetails'
+import AgentInfor from '../components/AgentInfor'
 
 Vue.use(VueRouter)
 
@@ -38,6 +39,10 @@ Vue.use(VueRouter)
   {
     path:'/ProductDetails/:id',
     component:ProductDetails
+  },
+  {
+    path:'/AgentInfor',
+    component:AgentInfor
   }
 //   {
 //     path: '/about',

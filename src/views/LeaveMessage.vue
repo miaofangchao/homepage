@@ -17,6 +17,5 @@ export default {
 <style lang="css" scoped>
   .leave-message{
     width: 100%;
-    margin-top: 46px;
   }
 </style>

@@ -32,7 +32,7 @@
           <input type="image" :src="sear" class="buttom" key="3" v-tap="{methods:submitForm}"/>
         </transition-group>
       </form>
-      <div class="text">
+      <div class="text" v-scrollClick="closeLogoutFlag">
         <span v-show="testLoginStateFlag" v-tap="{methods:showLogin}" id="LoginTxt"><p>{{loginState}}</p></span>
         <mt-spinner v-show="!testLoginStateFlag" type="fading-circle"></mt-spinner>
         <span v-show="logoutFlag" v-tap="{methods:logout}" id="logoutTxt"><p>退出登录</p></span>
@@ -76,9 +76,7 @@ export default {
   },
   computed: {
     testLoginStateFlag(){
-      if(this.loginFlag === true){
-        return true
-      }else if(this.loginFlag === false){
+      if(this.loginFlag === true || this.loginFlag === false){
         return true
       }else{
         return false
@@ -92,6 +90,7 @@ export default {
       }else{
         return '登录'
       }
+      // return this.loginFlag === true ? '管理' : '登录'
     }
   },
   components:{
@@ -129,7 +128,10 @@ export default {
       logout().then(()=>{
         this.logoutFlag = false
         myToast('退出登录',1500,'icon-duihao')
-        this.$store.commit('logout')
+        this.$store.dispatch('testLoginState')
+        if(this.$route.path == '/AgentInfor'){
+          this.$router.push('/')
+        }
       },()=>{
         this.logoutFlag = false
         myToast('退出失败',1500)
@@ -179,6 +181,9 @@ export default {
         this.$refs.searchform.submit()
       }
     },
+    closeLogoutFlag(){
+      this.logoutFlag = false
+    }
   },
   directives: {
     divHeight: {
@@ -193,6 +198,19 @@ export default {
       componentUpdated(el){
         window.addEventListener('scroll',()=>{
           el.blur()
+        })
+      }
+    },
+    //点击 或者 滚动时 隐藏退出登录按钮
+    scrollClick:{
+      bind:(el,binding)=>{
+        window.addEventListener('touchend',(e)=>{
+          if(!el.contains(e.target)){
+            binding.value()
+          }
+        })
+        window.addEventListener('scroll',()=>{
+          binding.value()
         })
       }
     }
@@ -270,7 +288,6 @@ export default {
   border: none;
   background-color: white;
   border-radius: 5px;
-  padding: 2% 0;
   font-size: 100%;
   flex: 0;
 }

@@ -33,7 +33,6 @@ export default {
 <style lang="css" scoped>
 #company-news-list {
   margin-bottom: 10px;
-  margin-top: 46px;
   width: 100%;
 }
 h3 {

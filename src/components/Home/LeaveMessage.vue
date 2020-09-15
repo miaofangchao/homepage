@@ -4,13 +4,15 @@
     class="m_bk"
     style="padding-top: 10px;"
   >
-    <form action="http://www.jius.net/Product/Refer.asp?Action=Post" method="post" name="thisForm">
+    <form action="" method="post" name="thisForm" ref="myform">
       <div class="lytit">
         对该公司产品感兴趣，请立即咨询↓
       </div>
       <div class="lyny">
         <ul class="tianx">
           <li>
+            <input type="text" :value="productId" style="display:none" name="ID">
+            <input type="text" :value="comId" style="display:none" name="ComID">
             <label for="ipuname">您的名字：</label>
             <input
               id="ipuname"
@@ -18,7 +20,12 @@
               type="text"
               class="inputly"
               placeholder="请输入姓名"
+              v-model="name"
             >
+            <span class="sex">
+              <input type="radio" name="Sex" value="1" v-model="sex" id="sex1"><label for="sex1">先生</label>
+              <input type="radio" name="Sex" value="2" v-model="sex" id="sex2"><label for="sex2">女士</label>
+            </span>
           </li>
           <li>
             <label for="iptel">联系电话：</label>
@@ -26,8 +33,10 @@
               id="iptel"
               name="Tel"
               type="number"
+              maxlength="11"
               class="inputly"
               placeholder="请输入手机号"
+              v-model="tel"
             >
           </li>
           <li id="msgdiv">
@@ -36,7 +45,7 @@
               <option value="请选择地区">请选择地区</option>
               <option v-for="item in provinceArr" :key="item.index" :value="item[0]">{{item[0]}}</option>
             </select>
-            <select name="city" >
+            <select name="city" v-model="city">
               <option v-for="item in matchCity[0]" :key="item.index" :value="item">{{item}}</option>
             </select>
           </li>
@@ -44,13 +53,13 @@
         <div class="xxlist">
           <ul>
             <li>
-              <label for="radio-1"><input name="radio" id="radio-1" type="radio" v-model="radio" value="我是新手，想从事酒水代理">我是新手，想从事酒水代理</label>
+              <input name="radio" id="radio-1" type="radio" v-model="radio" value="有意向代理贵公司，请寄资料或给我打电话。"><label for="radio-1">有意向代理贵公司，请寄资料或给我打电话。</label>
             </li>
             <li>
-              <label for="radio-2"><input name="radio" id="radio-2" type="radio" v-model="radio" value="我是成熟代理商，有固定的走货渠道">我是成熟代理商，有固定的走货渠道</label>
+              <input name="radio" id="radio-2" type="radio" v-model="radio" value="很感兴趣，想知道代理细节，请尽快联系我。"><label for="radio-2">很感兴趣，想知道代理细节，请尽快联系我。</label>
             </li>
             <li>
-              <label for="radio-3"><input name="radio" id="radio-3" type="radio" v-model="radio" value="我想做OEM贴牌运营商/订制酒">我想做OEM贴牌运营商/订制酒</label>
+              <input name="radio" id="radio-3" type="radio" v-model="radio" value="我想做长期团购，请尽快联系我。"><label for="radio-3">我想做长期团购，请尽快联系我。</label>
             </li>
           </ul>
           <textarea
@@ -68,6 +77,7 @@
             name="QQ"
             type="radio"
             checked="checked"
+            v-model="qq"
           >
           <label for="forone">
             同意同类厂家查看
@@ -83,6 +93,7 @@
             value="2"
             name="QQ"
             type="radio"
+            v-model="qq"
           >
           <label for="fortwo">
             同意本厂家查看
@@ -91,7 +102,6 @@
               target="_blank"
             >《中国酒商网代理商服务条款》</a>
           </label>
-          <input type="radio" name="Sex" value="1" checked class="hidText">
           <input type="text" name="QH" value="" maxlength="20" class="hidText">
           <input type="text" name="Wx" value="" maxlength="20" class="hidText">
         </div>
@@ -100,26 +110,104 @@
           type="submit"
           class="tijiaobtn"
           value="立即咨询"
+          v-tap="{methods:submitMsg}"
         >
       </div>
     </form>
   </div>
 </template>
 <script>
+import myToast from '@/views/myToast'
+import leaveMsg from '@/api/leave-msg'
+import "@/assets/icon/font_duihao/iconfont.css"
 export default {
   data() {
     return {
       provinceArr:null,
       cityArr:null,
       area:'请选择地区',
-      radio:null
+      name:'',
+      sex:1,
+      tel:'',
+      radio:'有意向代理贵公司，请寄资料或给我打电话。',
+      city:'',
+      qq:1
     }
   },
   computed: {
+    //根据选择的省份，获取对应的城市
     matchCity () {
-      return this.cityArr.filter((item)=>{
-        return item[0] == this.area
+      return this.cityArr.filter((item,index)=>{
+        let n = this.provinceArr.findIndex((item)=>{
+          return item == this.area
+        })
+        return index == n
       })
+    },
+    comId(){
+      return this.$store.state.comId
+    },
+    productId(){
+      if(this.$store.state.msg){
+        let n = this.$store.state.msg.productImg.length
+        return this.$store.state.msg.productImg[n-1].productId
+      }else{
+        return null
+      }
+    },
+    comName(){
+      if(this.$store.state.msg){
+        return this.$store.state.msg.msgname
+      }else{
+        return null
+      }
+    },
+    flId(){
+      if(this.$store.state.msg){
+        return this.$store.state.msg.flId
+      }else{
+        return null
+      }
+    },
+    email(){
+      return this.area + this.city
+    }
+  },
+  methods: {
+    submitMsg(){
+      if(this.name === ''){
+        myToast('请输入姓名',1500)
+      }else if(!(/^1[3456789]\d{9}$/).test(parseInt(this.tel))){
+        myToast('手机号码有误',1500)
+      }else if(this.area == '请选择地区' || this.city == ''){
+        myToast('请选择地区',1500)
+      }else if(this.radio == '') {
+        myToast('请输入留言信息',1500)
+      }else{
+        leaveMsg({
+          comId:this.comId,
+          productId:this.productId,
+          name:this.name,
+          sex:this.sex,
+          tel:this.tel,
+          email:this.email,
+          radio:this.radio,
+          qq:this.qq,
+          comName:this.comName,
+          flId:this.flId
+        }).then(res=>{
+          // console.log(res.data)
+          if(res.data.indexOf('代理意向提交成功') != -1){
+            myToast('提交成功',2000,'icon-duihao')
+            this.name = this.tel = ''
+          }else{
+            myToast('信息错误，请核对信息',1500)
+          }
+        }).catch(err=>{
+          console.log(err)
+          myToast('出错了，请联系管理员',1500)
+        })
+      }
     }
   },
   created() {
@@ -161,40 +249,40 @@ export default {
     provinceArr[33] = ['澳门'];
     //市县,每个数组第一个元素为省份,其他的为这个省份下的市县
     var cityArr = [];
-    cityArr[0] = ['北京市','东城区', '西城区','崇文区','宣武区','朝阳区','丰台区','石景山区', '海淀区','门头沟区', '房山区','通州区','顺义区','昌平区','大兴 区','怀柔区','平谷区','密云县','延庆县'];
-    cityArr[1] = ['天津市','和平区','河东区', '河西区', '南开区', '河北区', '红桥区', '塘沽区', '汉沽区', '大港区', '东丽区', '西青区', '津南区', '北辰区', '武清区', '宝坻区', '宁河县', '静海县', '蓟县']; 
-    cityArr[2] = ['上海市','黄浦区','卢湾区', '徐汇区','长宁区','静安区','普陀区','闸北区','虹口区', '杨浦区', '闵行区', '宝山区', '嘉定区', '浦东新区', '金山区', '松江区', '青浦区', '南汇区', '奉贤区', '崇明县']; 
-    cityArr[3] = ['重庆市','万州区','涪陵区','渝中区','大渡口区','江北区','沙坪坝区','九龙坡区','南岸区','北碚区','万盛区','双桥区','渝北区','巴南区','黔江区','长寿区','江津区','合川区','永川区','南川区','綦江县','潼南县','铜梁县','大足县','荣昌县','璧山县','梁平县','城口县','丰都县','垫江县','武隆县','忠县','开县','云阳县','奉节县','巫山县','巫溪县','石柱土家族自治县','秀山土家族苗族自治县','酉阳土家族苗族自治县','彭水苗族土家族自治县']; 
-    cityArr[4] = ['河北省','石家庄市', '唐山市', '秦皇岛市', '邯郸市', '邢台市', '保定市', '张家口市', '承德市', '沧州市', '廊坊市', '衡水市']; 
-    cityArr[5] = ['河南省','郑州市','开封市','洛阳市', '平顶山市', '安阳市', '鹤壁市', '新乡市', '焦作市', '济源市', '濮阳市', '许昌市', '漯河市', '三门峡市', '南阳市', '商丘市', '信阳市', '周口市', '驻马店市']; 
-    cityArr[6] = ['云南省','昆明市',' 曲靖市','玉溪市','保山市','昭通市','丽江市','思茅市','临沧市','楚雄彝族自治州','红河哈尼族彝族自治州','文山壮族苗族自治州','西双版纳傣族自治州','大理白族自治州','德宏傣族景颇族自治州','怒江傈僳族自治州','迪庆藏族自治州']; 
-    cityArr[7] = ['辽宁省','沈阳市' ,'大连市' ,'鞍山市' ,'抚顺市' ,'本溪市' ,'丹东市' ,'锦州市' ,'营口市' ,'阜新市' ,'辽阳市' ,'盘锦市' ,'铁岭市' ,'朝阳市' ,'葫芦岛市']; 
-    cityArr[8] = ['黑龙江省','哈尔滨市','齐齐哈尔市','鸡西市','鹤岗市','双鸭山市', '大庆市', '伊春市', '佳木斯市', '七台河市', '牡丹江市', '黑河市', '绥化市', '大兴安岭地区']; 
-    cityArr[9] = ['湖南省','长沙市', '株洲市','湘潭市', '衡阳市', '邵阳市', '岳阳市', '常德市', '张家界市', '益阳市', '郴州市', '永州市', '怀化市', '娄底市', '湘西土家族苗族自治州']; 
-    cityArr[10] = ['安徽省','合肥市', '芜湖市', '蚌埠市', '淮南市', '马鞍山市', '淮北市', '铜陵市', '安庆市', '黄山市', '滁州市','阜阳市','宿州市', '巢湖市', '六安市', '亳州市', '池州', '宣城市']; 
-    cityArr[11] = ['山东省','济南市','青岛市','淄博市','枣庄市','东营市','烟台市','潍坊市','济宁市','泰安市','威海市','日照市','莱芜市','临沂市','德州市','聊城市','滨州市','菏泽市'];
-    cityArr[12] = ['新疆维吾尔自治区','乌鲁木齐市', '克拉玛依市', '吐鲁番地区', '哈密地区', '昌吉回族自治州 ', '博尔塔拉蒙古自治州 ', '巴音郭楞蒙古自治州 ', '阿克苏地区', '克孜勒苏柯尔克孜自治州 ', '喀什地区', '和田地区', '伊犁哈萨克自治州', '塔城地区', '阿勒泰地区', '石河子市', '阿拉尔市', '图木舒克市', '五家渠市' ]; 
-    cityArr[13] = ['江苏省','南京市', '无锡市', '徐州市', '常州市', '苏州市', '南通市', '连云港市', '淮安市', '盐城市', '扬州市', '镇江市', '泰州市', '宿迁市' ];
-    cityArr[14] = ['浙江省','杭州市', '宁波市', '温州市', '嘉兴市', '湖州市', '绍兴市', '金华市', '衢州市', '舟山市', '台州市', '丽水市']; 
-    cityArr[15] = ['江西省','南昌市','景德镇市','萍乡市','九江市','新余市','鹰潭市','赣州市','吉安市','宜春市','抚州市','上饶市'];
-    cityArr[16] = ['湖北省','武汉市','黄石市','十堰市', '宜昌市', '襄樊市', '鄂州市', '荆门市', '孝感市', '荆州市', '黄冈市', '咸宁市', '随州市', '恩施土家族苗族自治州','仙桃市', '潜江市', '天门市', '神农架林区'];
-    cityArr[17] = ['广西壮族','南宁市','柳州市','桂林市','梧州市','北海市','防城港市','钦州市','贵港市','玉林市','百色市','贺州市','河池市','来宾市','崇左市'];
-    cityArr[18] = ['甘肃省','兰州市','嘉峪关市', '金昌市', '白银市', '天水市', '武威市', '张掖市', '平凉市', '酒泉市', '庆阳市', '定西市', '陇南市', '临夏回族自治州', '甘南藏族自治州'];
-    cityArr[19] = ['山西省','太原市','大同市', '阳泉市', '长治市', '晋城市', '朔州市', '晋中市', '运城市', '忻州市', '临汾市', '吕梁市' ];
-    cityArr[20] = ['内蒙古自治区','呼和浩特市', '包头市', '乌海市', '赤峰市', '通辽市', '鄂尔多斯市', '呼伦贝尔市', '巴彦淖尔市', '乌兰察布市', '兴安盟', '锡林郭勒盟', '阿拉善盟' ];
-    cityArr[21] = ['陕西省','西安市','铜川市','宝鸡市', '咸阳市', '渭南市', '延安市', '汉中市', '榆林市', '安康市', '商洛市' ];
-    cityArr[22] = ['吉林省','长春市', '吉林市', '四平市', '辽源市', '通化市', '白山市', '松原市', '白城市', '延边朝鲜族自治州'];
-    cityArr[23] = ['福建省','福州市', '厦门市', '莆田市', '三明市', '泉州市', '漳州市', '南平市', '龙岩市', '宁德市' ];
-    cityArr[24] = ['贵州省','贵阳市','六盘水市', '遵义市', '安顺市', '铜仁地区', '黔西南布依族苗族自治州', '毕节地区', '黔东南苗族侗族自治州', '黔南布依族苗族自治州'];
-    cityArr[25] = ['广东省','广州市','韶关市','深圳市','珠海市','汕头市','佛山市','江门市','湛江市','茂名市','肇庆市','惠州市','梅州市','汕尾市','河源市','阳江市','清远市','东莞市','中山市','潮州市','揭阳市','云浮市'];
-    cityArr[26] = ['青海省','西宁市' ,'海东地区', '海北藏族自治州', '黄南藏族自治州', '海南藏族自治州', '果洛藏族自治州', '玉树藏族自治州', '海西蒙古族藏族自治州'];
-    cityArr[27] = ['西藏','拉萨市','昌都地区', '山南地区', '日喀则地市', '那曲地区', '阿里地区', '林芝地区' ];
-    cityArr[28] = ['四川省','成都市','自贡市', '攀枝花市', '泸州市', '德阳市', '绵阳市', '广元市', '遂宁市', '内江市', '乐山市', '南充市', '眉山市', '宜宾市', '广安市', '达州市', '雅安市', '巴中市', '资阳市', '阿坝藏族羌族自治州', '甘孜藏族自治州', '凉山彝族自治州'];
-    cityArr[29] = ['宁夏回族','银川市','石嘴山市','吴忠市','固原市','中卫市'];
-    cityArr[30] = ['海南省','海口市','三亚市','五指山市', '琼海市', '儋州市', '文昌市', '万宁市', '东方市', '定安县', '屯昌县', '澄迈县', '临高县', '白沙黎族自治县', '昌江黎族自治县', '乐东黎族自治县', '陵水黎族自治县', '保亭黎族苗族自治县', '琼中黎族苗族自治县' ];
-    cityArr[31] = ['台湾省','台北市', '高雄市', '基隆市', '台中市', '台南市', '新竹市', '嘉义市'];
-    cityArr[32] = ['香港特别行政区','中西区', '湾仔区', '东区', '南区', '油尖旺区', '深水埗区', '九龙城区', '黄大仙区', '观塘区', '荃湾区', '葵青区', '沙田区', '西贡区', '大埔区', '北区', '元朗区', '屯门区', '离岛区' ];
-    cityArr[33] = ['澳门特别行政区','澳门'];
+    cityArr[0] = ['东城', '西城','崇文','宣武','朝阳','丰台','石景山', '海淀','门头沟', '房山','通州','顺义','昌平','大兴','怀柔','平谷 ','密云','延庆'];
+    cityArr[1] = ['和平','河东', '河西', '南开', '河北', '红桥', '塘沽', '汉沽', '大港', '东丽', '西青', '津南', '北辰', '武清', '宝坻', '宁河', '静海', '蓟县']; 
+    cityArr[2] = ['黄浦','卢湾', '徐汇','长宁','静安','普陀','闸北','虹口', '杨浦', '闵行', '宝山', '嘉定', '浦东新', '金山', '松江', '青浦', '南汇', '奉贤', '崇明']; 
+    cityArr[3] = ['万州','涪陵','渝中','大渡口','江北','沙坪坝','九龙坡','南岸','北碚','万盛','双桥','渝北','巴南','黔江','长寿','江津','合川','永川','南川','綦江','潼南','铜梁','大足','荣昌','璧山','梁平','城口','丰都','垫江','武隆','忠县','开县','云阳','奉节','巫山','巫溪','石柱','秀山','酉阳','彭水']; 
+    cityArr[4] = ['石家庄', '唐山', '秦皇岛', '邯郸', '邢台', '保定', '张家口', '承德', '沧州', '廊坊', '衡水']; 
+    cityArr[5] = ['郑州','开封','洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '济源', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店']; 
+    cityArr[6] = ['昆明',' 曲靖','玉溪','保山','昭通','丽江','思茅','临沧','楚雄','红河','文山','西双版纳','大理','德宏','怒江','迪庆']; 
+    cityArr[7] = ['沈阳' ,'大连' ,'鞍山' ,'抚顺' ,'本溪' ,'丹东' ,'锦州' ,'营口' ,'阜新' ,'辽阳' ,'盘锦' ,'铁岭' ,'朝阳' ,'葫芦岛']; 
+    cityArr[8] = ['哈尔滨','齐齐哈尔','鸡西','鹤岗','双鸭山', '大庆', '伊春', '佳木斯', '七台河', '牡丹江', '黑河', '绥化', '大兴安岭']; 
+    cityArr[9] = ['长沙', '株洲','湘潭', '衡阳', '邵阳', '岳阳', '常德', '张家界', '益阳', '郴州', '永州', '怀化', '娄底', '湘西']; 
+    cityArr[10] = ['合肥', '芜湖', '蚌埠', '淮南', '马鞍山', '淮北', '铜陵', '安庆', '黄山', '滁州','阜阳','宿州', '巢湖', '六安', '亳州', '池州', '宣城']; 
+    cityArr[11] = ['济南','青岛','淄博','枣庄','东营','烟台','潍坊','济宁','泰安','威海','日照','莱芜','临沂','德州','聊城','滨州','菏泽'];
+    cityArr[12] = ['乌鲁木齐', '克拉玛依', '吐鲁番地', '哈密地', '昌吉', '博尔塔拉', '巴音郭楞', '阿克苏地', '克孜勒苏柯尔克孜', '喀什地', '和田地', '伊犁哈萨克', '塔城地', '阿勒泰地', '石河子', '阿拉尔', '图木舒克', '五家渠' ]; 
+    cityArr[13] = ['南京', '无锡', '徐州', '常州', '苏州', '南通', '连云港', '淮安', '盐城', '扬州', '镇江', '泰州', '宿迁' ];
+    cityArr[14] = ['杭州', '宁波', '温州', '嘉兴', '湖州', '绍兴', '金华', '衢州', '舟山', '台州', '丽水']; 
+    cityArr[15] = ['南昌','景德','萍乡','九江','新余','鹰潭','赣州','吉安','宜春','抚州','上饶'];
+    cityArr[16] = ['武汉','黄石','十堰', '宜昌', '襄樊', '鄂州', '荆门', '孝感', '荆州', '黄冈', '咸宁', '随州', '恩施','仙桃', '潜江', '天门', '神农架'];
+    cityArr[17] = ['南宁','柳州','桂林','梧州','北海','防城港','钦州','贵港','玉林','百色','贺州','河池','来宾','崇左'];
+    cityArr[18] = ['兰州','嘉峪关', '金昌', '白银', '天水', '武威', '张掖', '平凉', '酒泉', '庆阳', '定西', '陇南', '临夏', '甘南'];
+    cityArr[19] = ['太原','大同', '阳泉', '长治', '晋城', '朔州', '晋中', '运城', '忻州', '临汾', '吕梁' ];
+    cityArr[20] = ['呼和浩特', '包头', '乌海', '赤峰', '通辽', '鄂尔多斯', '呼伦贝尔', '巴彦淖尔', '乌兰察布', '兴安盟', '锡林郭勒盟', '阿拉善' ];
+    cityArr[21] = ['西安','铜川','宝鸡', '咸阳', '渭南', '延安', '汉中', '榆林', '安康', '商洛' ];
+    cityArr[22] = ['长春', '吉林', '四平', '辽源', '通化', '白山', '松原', '白城', '延边'];
+    cityArr[23] = ['福州', '厦门', '莆田', '三明', '泉州', '漳州', '南平', '龙岩', '宁德' ];
+    cityArr[24] = ['贵阳','六盘水', '遵义', '安顺', '铜仁地', '黔西', '毕节地', '黔东南', '黔南'];
+    cityArr[25] = ['广州','韶关','深圳','珠海','汕头','佛山','江门','湛江','茂名','肇庆','惠州','梅州','汕尾','河源','阳江','清远','东莞','中山','潮州','揭阳','云浮'];
+    cityArr[26] = ['西宁' ,'海东地', '海北', '黄南', '海南', '果洛', '玉树', '海西'];
+    cityArr[27] = ['拉萨','昌都', '山南', '日喀则', '那曲', '阿里', '林芝' ];
+    cityArr[28] = ['成都','自贡', '攀枝花', '泸州', '德阳', '绵阳', '广元', '遂宁', '内江', '乐山', '南充', '眉山', '宜宾', '广安', '达州', '雅安', '巴中', '资阳', '阿坝', '甘孜', '凉山'];
+    cityArr[29] = ['银川','石嘴山','吴忠','固原','中卫'];
+    cityArr[30] = ['海口','三亚','五指山', '琼海', '儋州', '文昌', '万宁', '东方', '定安', '屯昌', '澄迈', '临高', '白沙', '昌江', '乐东', '陵水', '保亭', '琼中' ];
+    cityArr[31] = ['台北', '高雄', '基隆', '台中', '台南', '新竹', '嘉义'];
+    cityArr[32] = ['中西', '湾仔', '东区', '南区', '油尖旺', '深水埗', '九龙城', '黄大仙', '观塘', '荃湾', '葵青', '沙田', '西贡', '大埔', '北', '元朗', '屯门', '离岛' ];
+    cityArr[33] = ['澳门'];
     this.provinceArr = provinceArr
     this.cityArr = cityArr
   },
@@ -224,7 +312,7 @@ export default {
   border-radius: 4px;
   line-height: 28px;
   height: 28px;
-  font-size: 16px;
+  font-size: 120%;
   position: relative;
   margin: 10px 0;
 }
@@ -234,7 +322,7 @@ export default {
   line-height: 28px;
   outline: none;
   width: 70%;
-  font-size: 16px;
+  font-size: 100%;
   font-family: "Microsoft yahei";
   color: #555;
 }
@@ -242,14 +330,15 @@ export default {
   margin: 10px 0;
 }
 .xxlist li {
-  font-size: 16px;
+  font-size: 110%;
   line-height: 28px;
   color: #555;
   text-align: left;
+  display: flex;
+  align-items: center;
 }
-.xxlist li input {
+.xxlist li input,.uxy input,.tianx .sex input{
   margin-right: 5px;
-  vertical-align: -18%;
 }
 .ztcont {
   border: #e5e5e5 1px solid;
@@ -265,10 +354,12 @@ export default {
 }
 
 .uxy {
-  font-size: 14px;
+  font-size: 100%;
   color: #555;
   line-height: 22px;
   text-align: left;
+  display: flex;
+  align-items: center;
 }
 .tijiaobtn {
   width: 100%;
@@ -283,20 +374,21 @@ export default {
   margin-top: 10px;
 }
 #leave-message select{
-  width: 35%;
+  width: 33%;
   margin-right: 5px;
-  font-size: 16px;
   border-radius: 5px;
   border-color: #cccccc;
-  vertical-align: middle;
-}
-.uxy input {
-    vertical-align: -20%;
-}
-label{
-  vertical-align: middle;
+  vertical-align: text-bottom;
+  font-size: 90%;
 }
 .hidText{
   display: none;
 }
+.tianx .sex {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 </style>

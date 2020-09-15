@@ -60,7 +60,6 @@ export default {
 </script>
 <style lang="css" scoped>
     .company-news-single{
-        margin-top: 46px;
         width: 100%;
     }
     p{

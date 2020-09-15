@@ -83,7 +83,6 @@ export default {
 </script>
 <style lang="css" scoped>
     #product-details{
-        margin-top: 46px;
         width: 100%;
     }
     li{

@@ -109,7 +109,7 @@ export default {
               case 4:
                 myToast("欢迎回来!", 1500, "icon-duihao");
                 this.closeLogin();
-                this.$store.commit('login')
+                this.$store.dispatch('testLoginState')
                 break;
             }
           },

@@ -1,9 +1,9 @@
 import Vue from 'vue'
-const login = (userName, passWord) => {
+const leaveMsg = (option) => {
     return new Promise((resolve, reject) => {
         Vue.axios({
             // url: "http://m-cs.jius.net/test.asp",
-            url: "http://cs.jius.net/Login.asp?Action=Log",
+            url: "http://cs.jius.net/Product/Refer.asp?Action=Post",
             method: "post",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -22,10 +22,16 @@ const login = (userName, passWord) => {
                 },
             ],
             data: {
-                UserName: userName,
-                PassWord: passWord,
-                Cookie: 1,
-                ComeUrl: "/Member/",
+                ComID: option.comId,//公司id
+                ID: option.productId,//产品id
+                Name: option.name,//姓名
+                Sex:option.sex,//性别
+                Tel: option.tel,//电话
+                Email: option.email,//地址
+                Intro: option.radio,//留言内容
+                QQ: option.qq,//允许查看范围
+                ComName:option.comName,//公司名
+                Fl:option.flId//企业分类
             },
         }).then(res => {
             resolve(res)
@@ -37,5 +43,6 @@ const login = (userName, passWord) => {
         )
     })
 }
-export default login
-//返回内容同pc端。在login.vue中判断
+export default leaveMsg
+
+// 发送浏览表单信息。
