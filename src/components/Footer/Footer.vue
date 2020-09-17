@@ -9,7 +9,7 @@
           <a :href="'tel:'+ tel">
             <p>
               <img src="@/assets/ft2.png">
-            </p>联系我们
+            </p>电话咨询
           </a>
         </li>
         <li class="nav5">
@@ -24,7 +24,7 @@
           class="nav3"
           @click.stop="showForm()"
         >
-          <span>申请样品</span>
+          <span>联系我们</span>
         </li>
         <li class="nav4">
           <router-link to="/LeaveMessage">立即咨询</router-link>

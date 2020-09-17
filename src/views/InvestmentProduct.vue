@@ -29,5 +29,6 @@ export default {
 <style lang="css" scoped>
     #investment-product{
         width: 100%;
+        padding-bottom: 10px;
     }
 </style>

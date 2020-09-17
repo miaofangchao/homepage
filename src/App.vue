@@ -105,7 +105,10 @@ a {
   text-decoration: none;
   color: #666666;
 }
-
+a, a:hover, a:visited, a:link, a:active , a:focus {
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(168, 14, 14, 0); /*解决手机版点击背景问题*/
+}
 ol,
 ul,
 li {

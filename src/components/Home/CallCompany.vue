@@ -10,28 +10,10 @@
         联系人：
         <span>{{ contacts }}</span>
       </p>
-      <!-- <p>
-				手机：
-				<span>13737688000</span>
-			</p> -->
       <p>
         电话：
         <span>{{ tel }}</span>
       </p>
-      <!-- <p>
-				QQ：
-				<span>77621624</span>
-			</p> -->
-      <!-- <p>
-				邮箱：
-				<span>77621624@qq.com</span>
-			</p> -->
-      <!-- <p>
-				网址：
-				<span>
-					<a href="http://m.jius.net/company/guiquan/" target="_blank">http://m.jius.net/company/guiquan/</a>
-				</span>
-			</p> -->
       <p>地址：{{ address }}</p>
     </div>
   </div>

@@ -220,16 +220,6 @@ export default {
           myToast("加载出错", 2000);
         }
       );
-      // 测试数据
-      // setTimeout(() => {
-      //   Indicator.close();
-      //   this.showTelFlag = true;
-      //   this.tel =
-      //     "电话：<img src=/UpFile/CreTel/Dl/399815/c213d61846e406e90b19505575265339.gif border=0 align=absmiddle>";
-      //   this.telTimerId = setTimeout(() => {
-      //     this.showTelFlag = false;
-      //   }, 5000);
-      // }, 500);
     },
     //跳转页数
     jumpPage() {

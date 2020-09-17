@@ -48,6 +48,5 @@ a {
   width: 25%;
   text-align: center;
   font-size: 150%;
-  font-weight: bold;
 }
 </style>

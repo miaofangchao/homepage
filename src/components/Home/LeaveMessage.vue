@@ -4,7 +4,7 @@
     class="m_bk"
     style="padding-top: 10px;"
   >
-    <form action="" method="post" name="thisForm" ref="myform">
+    <form action="javascript:void 0" method="post" name="thisForm" ref="myform">
       <div class="lytit">
         对该公司产品感兴趣，请立即咨询↓
       </div>
@@ -84,7 +84,7 @@
             <a
               href="http://www.jius.net/fwtk.html"
               target="_blank"
-            >《中国酒商网代理商服务条款》</a>
+            >《酒商网代理商服务条款》</a>
           </label>
         </div>
         <div class="uxy">
@@ -98,9 +98,9 @@
           <label for="fortwo">
             同意本厂家查看
             <a
-              href="http://www.9928.tv/sevicetk.html"
+              href="http://www.jius.net/fwtk.html"
               target="_blank"
-            >《中国酒商网代理商服务条款》</a>
+            >《酒商网代理商服务条款》</a>
           </label>
           <input type="text" name="QH" value="" maxlength="20" class="hidText">
           <input type="text" name="Wx" value="" maxlength="20" class="hidText">
@@ -145,7 +145,11 @@ export default {
       })
     },
     comId(){
-      return this.$store.state.comId
+      if(this.$store.state.msg){
+        return this.$store.state.msg.comId
+      }else{
+        return null
+      }
     },
     productId(){
       if(this.$store.state.msg){
@@ -157,7 +161,7 @@ export default {
     },
     comName(){
       if(this.$store.state.msg){
-        return this.$store.state.msg.msgname
+        return this.$store.state.msg.name
       }else{
         return null
       }
