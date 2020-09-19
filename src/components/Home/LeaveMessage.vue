@@ -41,11 +41,12 @@
           </li>
           <li id="msgdiv">
             <label>所在地区：</label>
-            <select name="province" v-model="area">
+            <select name="province" v-model="area" @change="changeCity">
               <option value="请选择地区">请选择地区</option>
               <option v-for="item in provinceArr" :key="item.index" :value="item[0]">{{item[0]}}</option>
             </select>
             <select name="city" v-model="city">
+              <option value="请选择地区">请选择地区</option>
               <option v-for="item in matchCity[0]" :key="item.index" :value="item">{{item}}</option>
             </select>
           </li>
@@ -130,7 +131,7 @@ export default {
       sex:1,
       tel:'',
       radio:'有意向代理贵公司，请寄资料或给我打电话。',
-      city:'',
+      city:'请选择地区',
       qq:1
     }
   },
@@ -183,7 +184,7 @@ export default {
         myToast('请输入姓名',1500)
       }else if(!(/^1[3456789]\d{9}$/).test(parseInt(this.tel))){
         myToast('手机号码有误',1500)
-      }else if(this.area == '请选择地区' || this.city == ''){
+      }else if(this.area == '请选择地区' || this.city == '请选择地区'){
         myToast('请选择地区',1500)
       }else if(this.radio == '') {
         myToast('请输入留言信息',1500)
@@ -212,6 +213,10 @@ export default {
           myToast('出错了，请联系管理员',1500)
         })
       }
+    },
+    //选择地区，选中城市第一个
+    changeCity(){
+      this.city = this.matchCity[0][0]
     }
   },
   created() {

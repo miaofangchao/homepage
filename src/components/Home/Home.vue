@@ -17,7 +17,7 @@
       :product-img="msg.productImg" 
     />
     <InvestmentPolicy 
-      :investmentPolicy="msg.investmentPolicy.reverse()" />
+      :investmentPolicy="msg.investmentPolicy" />
     <LeaveMessage />
     <CallCompany 
       :name="msg.name"
