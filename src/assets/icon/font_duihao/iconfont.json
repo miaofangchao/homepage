@@ -1,0 +1,16 @@
+{
+  "id": "2048185",
+  "name": "jius",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5327479",
+      "name": "对号",
+      "font_class": "duihao",
+      "unicode": "e6fd",
+      "unicode_decimal": 59133
+    }
+  ]
+}
